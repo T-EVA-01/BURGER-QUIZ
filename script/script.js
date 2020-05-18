@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.querySelector('#closeModal'); // Получаем кнопку-крести, по нажатию на которую закрывается модальное окно.
     const questionTitle = document.querySelector('#question'); // Получаем h5 c id = "question".
     const formAnswers = document.querySelector('#formAnswers'); // Получем форму ответа formAnswers.
+    const modalWrap = document.querySelector('.modal');
+
 
 
     // Бургер 
@@ -53,6 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }); 
 
+    // Навешиваем обработчик на document и исключаем из document с помощью дилегирования классы по клику на которые модальное окно не должно закрываться (если я все правильно понял)  
+    document.addEventListener('click', function() {
+        if (
+            !event.target.closest(".modal-dialog") &&
+            !event.target.closest(".openModalButton") &&
+            !event.target.closest(".burger")
+            ) {
+                modalBlock.classList.remove('d-block'); // Убирает класс 'd-block' у модольного окана, что скрывает его.
+                burgerBtn.classList.remove("active"); // Убирает класс 'activ' по нажатию на закрывающий модальное окно крестик.
+            }
+    });
+        
 
     // Вешаем событие по клику на кнопку бургер. 
     burgerBtn.addEventListener("click", function () {

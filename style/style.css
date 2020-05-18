@@ -113,14 +113,14 @@ label span {
     display: block;
     background-color: #3CB371;
     border: 1px solid #000;
-    transition: transform 0.1s linear;
+    transition: transform 0.15s linear;
 }
 
 
 /* Обращаемся к первому span, который являются дочерним элементам div c классом .burger, у которого есть класс .active  */
 /* .burger.active - обращаемся к классу burger, у которого есть класс active */
 .burger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(8px, 14px);
+    transform: rotate(405deg) translate(8px, 14px);
 }
 
 .burger.active span:nth-child(2) {
