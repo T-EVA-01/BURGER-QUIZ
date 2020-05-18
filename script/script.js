@@ -26,7 +26,84 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.querySelector('#closeModal'); // Получаем кнопку-крести, по нажатию на которую закрывается модальное окно.
     const questionTitle = document.querySelector('#question'); // Получаем h5 c id = "question".
     const formAnswers = document.querySelector('#formAnswers'); // Получем форму ответа formAnswers.
-    const modalWrap = document.querySelector('.modal');
+    const nextButton = document.querySelector('#next'); // Кнопка next модального окна.
+    const prevButton = document.querySelector('#prev'); // Кнопка prev модального окна.
+
+    // Массив, который содержит объекты с вопросоми и вариантами ответов
+    const question = [
+        {
+            question: "Какого цвета бургер?",
+            answers: [
+                {
+                    title: 'Стандарт',
+                    url: './image/burger.png'
+                },
+                {
+                    title: 'Черный',
+                    url: './image/burgerBlack.png'
+                }
+            ],
+            type: 'radio'
+        },
+        {
+            question: "Из какого мяса котлета?",
+            answers: [
+                {
+                    title: 'Курица',
+                    url: './image/chickenMeat.png'
+                },
+                {
+                    title: 'Говядина',
+                    url: './image/beefMeat.png'
+                },
+                {
+                    title: 'Свинина',
+                    url: './image/porkMeat.png'
+                }
+            ],
+            type: 'radio'
+        },
+        {
+            question: "Дополнительные ингредиенты?",
+            answers: [
+                {
+                    title: 'Помидор',
+                    url: './image/tomato.png'
+                },
+                {
+                    title: 'Огурец',
+                    url: './image/cucumber.png'
+                },
+                {
+                    title: 'Салат',
+                    url: './image/salad.png'
+                },
+                {
+                    title: 'Лук',
+                    url: './image/onion.png'
+                }
+            ],
+            type: 'checkbox'
+        },
+        {
+            question: "Добавить соус?",
+            answers: [
+                {
+                    title: 'Чесночный',
+                    url: './image/sauce1.png'
+                },
+                {
+                    title: 'Томатный',
+                    url: './image/sauce2.png'
+                },
+                {
+                    title: 'Горчичный',
+                    url: './image/sauce3.png'
+                }
+            ],
+            type: 'radio'
+        }
+    ];
 
 
 
@@ -90,30 +167,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функция, включающая в себя весь функционал тестирования.
     const playTest = () => {
-        const renderQuestions = ()  => {
-            questionTitle.textContent = 'Какого цвета бургер?'; // Добавляет/изменяет текстовое содержимое элемента.
-            formAnswers.innerHTML = 
-            `
-                <div class="answers-item d-flex flex-column">
-                    <input type="radio" id="answerItem1" name="answer" class="d-none">
-                    <label for="answerItem1" class="d-flex flex-column justify-content-between">
-                    <img class="answerImg" src="./image/burger.png" alt="burger">
-                    <span>Стандарт</span>
-                    </label>
-                </div>
-            `
+        let numberQuestion = 0;
+
+        // Переменная, в которую записан цикл, создающий верстку карточек в модальном окне
+        const renderAnswers = (index) => {
+            question[index].answers.forEach((answer) => {
+                const answerItem = document.createElement('div'); // создаем блок div внутри цикла 
+                answerItem.classList.add('answers-item', 'd-flex', 'flex-column'); // Добавляем необходимые классы стилизации для родительского div answerItem
+
+                // Записываем в него HTML-верстку 
+                answerItem.innerHTML = 
+                `
+                <input type="${question[index].type}" id="${answer.title}" name="answer" class="d-none">
+                <label for="${answer.title}" class="d-flex flex-column justify-content-between">
+                <img class="answerImg" src="${answer.url}" alt="burger">
+                <span>${answer.title}</span>
+                </label>
+                `
+                formAnswers.appendChild(answerItem); // Записываем answerItem с версткой внутрь переменной formAnswers, в которай находится форма ответа модольного окна
+            })
         };
-        renderQuestions();
-    };
+        // Данная функция вписывает информацию в блок с вопросами и ответами 
+        const renderQuestions = (indexQuestion)  => {
+            formAnswers.innerHTML = ''; // Удаляет все, что находилось в formAnswers после вызова функции  
 
+            questionTitle.textContent = `${question[indexQuestion].question}`; // Добавляем содержание из объекта question
+            renderAnswers(indexQuestion);
+        }
+        renderQuestions(numberQuestion);
 
+        // Обработчик событий по клику на кнопку next модального окна
+        nextButton.onclick = () => {
+            numberQuestion++; // С помощью инкремента увелчиваем indexQuestion, которая отражает индекс объекта внутри массива данных  
+            renderQuestions(numberQuestion); // Вызываем функцию renderQuestions с обнавленным аргументом numberQuestion
+        }
 
-
-
-
-
+        // Обработчик событий по клику на кнопку prev модального окна
+        prevButton.onclick = () => {
+            numberQuestion--; // С помощью инкремента уменьшаем indexQuestion, которая отражает индекс объекта внутри массива данных
+            renderQuestions(numberQuestion); // Вызываем функцию renderQuestions с обнавленным аргументом numberQuestion
+        }
+    }
 });
-
-
 
 
