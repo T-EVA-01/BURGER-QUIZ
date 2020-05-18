@@ -96,3 +96,38 @@ label span {
     -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: black; 
 }
+
+.burger {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+/* span - это строчный элемент */
+.burger span {  
+    width: 100%;
+    height: 5px;
+    display: block;
+    background-color: #3CB371;
+    border: 1px solid #000;
+    transition: transform 0.1s linear;
+}
+
+
+/* Обращаемся к первому span, который являются дочерним элементам div c классом .burger, у которого есть класс .active  */
+/* .burger.active - обращаемся к классу burger, у которого есть класс active */
+.burger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 14px);
+}
+
+.burger.active span:nth-child(2) {
+    transform: rotate(45deg) translate(-1px, 5px);
+    opacity: 0; /* Опредиляет уровень прозрачности элемента от 0 до 1 */
+}
+
+.burger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -9px);
+}
