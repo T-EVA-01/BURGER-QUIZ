@@ -105,8 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-
-
     // Бургер 
 
     const burgerBtn = document.getElementById("burger"); // Получаем бургер по Id.
@@ -120,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         burgerBtn.style.display = "none";
     }
+
 
     window.addEventListener('resize', function () { // Событие resize позволяет отслеживать изменения окна
         clientWidth = document.documentElement.clientWidth; // Возвращает ширину экрана (clientWidth - ширина окна клиента)
@@ -169,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const playTest = () => {
         let numberQuestion = 0;
 
+
         // Переменная, в которую записан цикл, создающий верстку карточек в модальном окне
         const renderAnswers = (index) => {
             question[index].answers.forEach((answer) => {
@@ -185,7 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </label>
                 `
                 formAnswers.appendChild(answerItem); // Записываем answerItem с версткой внутрь переменной formAnswers, в которай находится форма ответа модольного окна
+
             })
+
         };
         // Данная функция вписывает информацию в блок с вопросами и ответами 
         const renderQuestions = (indexQuestion)  => {
@@ -200,14 +202,18 @@ document.addEventListener('DOMContentLoaded', function() {
         nextButton.onclick = () => {
             numberQuestion++; // С помощью инкремента увелчиваем indexQuestion, которая отражает индекс объекта внутри массива данных  
             renderQuestions(numberQuestion); // Вызываем функцию renderQuestions с обнавленным аргументом numberQuestion
+            console.log(numberQuestion);
         }
 
         // Обработчик событий по клику на кнопку prev модального окна
         prevButton.onclick = () => {
             numberQuestion--; // С помощью инкремента уменьшаем indexQuestion, которая отражает индекс объекта внутри массива данных
             renderQuestions(numberQuestion); // Вызываем функцию renderQuestions с обнавленным аргументом numberQuestion
+            console.log(numberQuestion);
         }
     }
 });
+
+
 
 
