@@ -72,11 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModal.addEventListener('click', () => {
         modalBlock.classList.remove('d-block'); // Убирает класс 'd-block' у модольного окана, что скрывает его.
         burgerBtn.classList.remove("active"); // Убирает класс 'activ' по нажатию на закрывающий модальное окно крестик
-
-        if(burgerBtn.classList.contains("active")) {
-            
-        }
-        
     });
 
     // Функция, включающая в себя весь функционал тестирования.
