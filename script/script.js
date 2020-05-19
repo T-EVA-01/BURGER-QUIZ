@@ -28,9 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const formAnswers = document.querySelector('#formAnswers'); // Получем форму ответа formAnswers.
     const nextButton = document.querySelector('#next'); // Кнопка next модального окна.
     const prevButton = document.querySelector('#prev'); // Кнопка prev модального окна.
+    const sendButton = document.querySelector('#send'); // Получаем кнопку send
 
     // Массив, который содержит объекты с вопросоми и вариантами ответов
-    const question = [
+    const questions = [
         {
             question: "Какого цвета бургер?",
             answers: [
@@ -166,19 +167,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функция, включающая в себя весь функционал тестирования.
     const playTest = () => {
+
+        const finalAnswers = [];
+        // Переменная с номером вопроса 
         let numberQuestion = 0;
 
 
-        // Переменная, в которую записан цикл, создающий верстку карточек в модальном окне
+        // Переменная, в которую записана функция, создающий верстку карточек в модальном окне
         const renderAnswers = (index) => {
-            question[index].answers.forEach((answer) => {
+            questions[index].answers.forEach((answer) => {
                 const answerItem = document.createElement('div'); // создаем блок div внутри цикла 
-                answerItem.classList.add('answers-item', 'd-flex', 'flex-column'); // Добавляем необходимые классы стилизации для родительского div answerItem
+                answerItem.classList.add('answers-item', 'd-flex', 'justify-content-center'); // Добавляем необходимые классы стилизации для родительского div answerItem
 
                 // Записываем в него HTML-верстку 
                 answerItem.innerHTML = 
                 `
-                <input type="${question[index].type}" id="${answer.title}" name="answer" class="d-none">
+                <input type="${questions[index].type}" id="${answer.title}" name="answer" class="d-none" value="${answer.title}">
                 <label for="${answer.title}" class="d-flex flex-column justify-content-between">
                 <img class="answerImg" src="${answer.url}" alt="burger">
                 <span>${answer.title}</span>
@@ -193,13 +197,66 @@ document.addEventListener('DOMContentLoaded', function() {
         const renderQuestions = (indexQuestion)  => {
             formAnswers.innerHTML = ''; // Удаляет все, что находилось в formAnswers после вызова функции  
 
-            questionTitle.textContent = `${question[indexQuestion].question}`; // Добавляем содержание из объекта question
-            renderAnswers(indexQuestion);
+            if(numberQuestion >= 0 && numberQuestion <= questions.length - 1) {
+                questionTitle.textContent = `${questions[indexQuestion].question}`; // Добавляем содержание из объекта question
+                renderAnswers(indexQuestion);
+                nextButton.classList.remove('d-none');
+                prevButton.classList.remove('d-none');
+                sendButton.classList.add('d-none');
+            }
+
+            if(numberQuestion === 0) {
+                prevButton.classList.add('d-none');
+            }
+
+            // if(numberQuestion === questions.length - 1) {
+            //     nextButton.classList.add('d-none');
+            // }
+
+            if(numberQuestion === questions.length) {
+                formAnswers.innerHTML = `
+                    <div class="form-group">
+                        <label for="numberPhone">Enter your number</label>
+                        <input type="phone" class="form-control" id="numberPhone">
+                    </div>
+                `;
+                nextButton.classList.add('d-none');
+                prevButton.classList.add('d-none');
+                sendButton.classList.remove('d-none');
+            }
+
+            if (numberQuestion === questions.length +1) {
+                formAnswers.textContent = "Спасибо за пройденный тест!";
+                // С помощью SetTimeout можно задать время отработки функции
+                setTimeout(() => {
+                    modalBlock.classList.remove('d-block');
+                }, 2000);
+            }
         }
         renderQuestions(numberQuestion);
 
+        const checkAnswers = () => {
+            const obj = {};
+
+            const inputs = [...formAnswers.elements].filter((input) => input.checked || input.id === 'numberPhone');
+            
+            inputs.forEach((input, index) => {
+                if(numberQuestion >= 0 && numberQuestion <= questions.length - 1) {
+                obj[`${index}_${questions[numberQuestion].question}`] = input.value;
+                }  
+
+                if(numberQuestion === questions.length) {
+                    obj['Номер телефона'] = input.value;
+                }
+            })
+
+            finalAnswers.push(obj);
+        } 
+
         // Обработчик событий по клику на кнопку next модального окна
         nextButton.onclick = () => {
+
+            checkAnswers();
             numberQuestion++; // С помощью инкремента увелчиваем indexQuestion, которая отражает индекс объекта внутри массива данных  
             renderQuestions(numberQuestion); // Вызываем функцию renderQuestions с обнавленным аргументом numberQuestion
             console.log(numberQuestion);
@@ -210,6 +267,14 @@ document.addEventListener('DOMContentLoaded', function() {
             numberQuestion--; // С помощью инкремента уменьшаем indexQuestion, которая отражает индекс объекта внутри массива данных
             renderQuestions(numberQuestion); // Вызываем функцию renderQuestions с обнавленным аргументом numberQuestion
             console.log(numberQuestion);
+        }
+
+        sendButton.onclick = () => {
+            numberQuestion++;
+            renderQuestions(numberQuestion);
+            checkAnswers();
+            console.log(finalAnswers);
+
         }
     }
 });
